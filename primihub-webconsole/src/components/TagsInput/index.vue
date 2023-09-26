@@ -44,6 +44,7 @@ export default {
       return this.selectedData
     }
   },
+
   methods: {
     setDisabled(data) {
       this.disabledInput = !!data

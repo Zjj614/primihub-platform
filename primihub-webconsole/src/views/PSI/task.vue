@@ -44,7 +44,7 @@
                   <div class="organ">
                     <el-select v-model="formData.ownOrganName" class="organ-select" style="display:inline-block;" disabled :placeholder="formData.ownOrganName" />
                   </div>
-                  <div class="content-organ">{{taskTypeText}}</div>
+                  <div class="content-organ">{{ taskTypeText }}</div>
                   <div class="organ">
                     <el-select v-model="formData.otherOrganId" placeholder="请选择协作方">
                       <el-option
@@ -79,7 +79,7 @@
                   <span>关联键</span>
                 </div>
                 <div class="row-right-container justify-content-between flex">
-                  <el-form-item  prop="ownKeyword">
+                  <el-form-item prop="ownKeyword">
                     <el-select v-model="formData.ownKeyword" v-loading="selectLoading" multiple no-data-text="暂无数据" clearable placeholder="发起方关联键">
                       <el-option
                         v-for="(item,index) in ownOrganResourceField"
@@ -385,7 +385,7 @@ export default {
               message: '创建完成',
               type: 'success'
             })
-            this.toResultPage()
+            this.toResultPage(res.result.dataPsiTask.taskId)
           } else {
             this.isRun = false
           }
@@ -396,9 +396,10 @@ export default {
         }
       })
     },
-    toResultPage() {
+    toResultPage(id) {
       this.$router.push({
-        name: 'PSIResult'
+        name: 'PSIDetail',
+        params: { id }
       })
     },
     checkParams() {
@@ -442,6 +443,7 @@ export default {
         this.tableDataA = await this.getPsiResourceAllocationList({
           organId: this.formData.ownOrganId
         })
+        console.log('tableDataA', this.tableDataA)
       } else {
         if (this.formData.otherOrganId === '') {
           this.$message.error('请选择协作方')

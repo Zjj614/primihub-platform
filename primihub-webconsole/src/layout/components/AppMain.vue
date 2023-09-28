@@ -37,7 +37,7 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <div class="guide-item"> <svg-icon icon-class="order" class="icon"/>提交工单</div>
+        <div class="guide-item"><a href="https://m74hgjmt55.feishu.cn/share/base/form/shrcnVHhIFLb4EJzOf4OXx0drLe" target="_blank"> <svg-icon icon-class="order" class="icon"/>提交工单</a></div>
       </div>
     </div>
     <transition name="fade-transform" mode="out-in">

@@ -22,22 +22,22 @@
 <!--          </el-dropdown>-->
 <!--        </div>-->
 <!--        <div class="guide-item"> <svg-icon icon-class="problem" class="icon"/>常见问题</div>-->
-<!--        <div class="guide-item">-->
-<!--          <el-dropdown>-->
-<!--            <div type="primary" class="dropdown-title">-->
-<!--              <svg-icon icon-class="server" class="icon"/>人工服务-->
-<!--            </div>-->
-<!--            <el-dropdown-menu slot="dropdown" class="drop-menu-item">-->
-<!--              <el-dropdown-item>-->
-<!--                <div class="contact-server">-->
-<!--                  <p>微信扫描二维码</p>-->
-<!--                  <img src="/static/img/assitant.001dc94b.png" alt="原语科技" />-->
-<!--                </div>-->
-<!--              </el-dropdown-item>-->
-<!--            </el-dropdown-menu>-->
-<!--          </el-dropdown>-->
-<!--        </div>-->
-<!--        <div class="guide-item"><a href="https://m74hgjmt55.feishu.cn/share/base/form/shrcnVHhIFLb4EJzOf4OXx0drLe" target="_blank"> <svg-icon icon-class="order" class="icon"/>提交工单</a></div>-->
+        <div class="guide-item">
+          <el-dropdown>
+            <div type="primary" class="dropdown-title">
+              <svg-icon icon-class="server" class="icon"/>人工服务
+            </div>
+            <el-dropdown-menu slot="dropdown" class="drop-menu-item">
+              <el-dropdown-item>
+                <div class="contact-server">
+                  <p>微信扫描二维码</p>
+                  <img src="/static/img/assitant.001dc94b.png" alt="原语科技" />
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <div class="guide-item"><a href="https://m74hgjmt55.feishu.cn/share/base/form/shrcnVHhIFLb4EJzOf4OXx0drLe" target="_blank"> <svg-icon icon-class="order" class="icon"/>提交工单</a></div>
       </div>
     </div>
     <transition name="fade-transform" mode="out-in">

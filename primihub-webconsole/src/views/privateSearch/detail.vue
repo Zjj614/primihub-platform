@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading" class="container">
+  <div class="container">
     <div class="detail">
       <h3>基础信息</h3>
       <div class="description-container section">
@@ -123,6 +123,9 @@ export default {
   },
   created() {
     this.fetchData()
+    this.timer = window.setInterval(() => {
+      setTimeout(this.fetchData(), 0)
+    }, 1500)
   },
   destroyed() {
     clearInterval(this.timer)
@@ -146,13 +149,6 @@ export default {
         if (res.code === 0) {
           this.taskData = res.result
           this.taskState = this.taskData.taskState
-          if (this.taskState === 2) {
-            this.timer = window.setInterval(() => {
-              setTimeout(this.fetchData(), 0)
-            }, 1500)
-          } else {
-            clearInterval(this.timer)
-          }
           this.previewList = this.taskData.list
           this.taskError = this.taskData.taskError ? this.taskData.taskError.split('\n') : []
           switch (this.taskState) {
@@ -213,11 +209,6 @@ export default {
 @import "~@/styles/taskDetail.scss";
 .description-container{
   flex: 1;
-  &.dataset-container{
-    // width: 300px;
-    // margin-left: 160px;
-    // margin-right: 50px;
-  }
 }
 .section .dataset-container{
   display: inline-block;

@@ -256,7 +256,7 @@ export default {
   margin-right: 3px;
 }
 .status-default{
-  background-color: #1677FF;
+  background-color: #00706B;
 }
 .status-end{
   background-color: #909399;

@@ -177,7 +177,7 @@ export default {
   border: 1px solid rgba(233, 233, 233, 1);
   overflow: hidden;
   &.selected{
-    border: 1px solid #1677FF;
+    border: 1px solid #00706B;
   }
   .check{
     width: 50px;

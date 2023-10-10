@@ -282,7 +282,7 @@ h3{
     margin-left: 10px;
   }
   .el-icon-time {
-    color: #1677FF;
+    color: #00706B;
     margin-right: 3px;
   }
   .section {

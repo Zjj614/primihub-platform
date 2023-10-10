@@ -265,7 +265,7 @@ export default {
   color: #67C23A;
 }
 .status-processing{
-  background-color: #1677FF;
+  background-color: #00706B;
 }
 .status-error{
   color: #F56C6C;

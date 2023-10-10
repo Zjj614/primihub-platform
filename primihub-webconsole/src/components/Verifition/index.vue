@@ -254,7 +254,7 @@ export default {
 }
 
 .verify-bar-area .verify-move-block:hover {
-    background-color: #1677FF;
+    background-color: #00706B;
     color: #FFFFFF;
 }
 

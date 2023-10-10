@@ -254,7 +254,7 @@ p{
 }
 .upload-icon{
   font-size: 40px;
-  color: #1677FF;
+  color: #00706B;
 }
 .upload-text{
   color: #606266;
@@ -272,7 +272,7 @@ p{
   border-radius: 6px;
   &:hover{
     cursor: pointer;
-    border-color: #1677FF;
+    border-color: #00706B;
   }
 }
 .upload-container{
@@ -282,7 +282,7 @@ p{
   padding: 20px 0;
   &:hover{
     cursor: pointer;
-    border-color: #1677FF;
+    border-color: #00706B;
   }
 }
 .upload-tip{

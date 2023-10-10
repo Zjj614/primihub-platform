@@ -108,7 +108,7 @@ export default {
           padding: 2px 3px;
           display: inline-block;
           &.active,&:hover{
-            background-color:#1677FF;
+            background-color:#00706B;
             color: #fff;
             border-radius: 3px;
           }

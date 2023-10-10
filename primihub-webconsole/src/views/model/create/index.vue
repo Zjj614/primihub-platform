@@ -348,7 +348,7 @@ export default {
 }
 
 ::v-deep .x6-widget-minimap-viewport{
-  border-color: #1677FF;
+  border-color: #00706B;
 }
 .center-container{
   flex: 1;

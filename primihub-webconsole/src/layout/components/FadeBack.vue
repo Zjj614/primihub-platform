@@ -46,7 +46,7 @@ export default {
   bottom: 20%;
   text-align: center;
   box-shadow: 5px 5px 5px rgba($color: #000000, $alpha: 0.1);
-  background-color: #1677FF;
+  background-color: #00706B;
   .text{
     font-size: 12px;
     color: #333;

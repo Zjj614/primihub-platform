@@ -29,6 +29,7 @@ export default {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   background: #1a69f9 url('../../assets/login-bg.png') left bottom no-repeat;
+  background-size: 100%;
   &-container{
     width: 100%;
     position: absolute;

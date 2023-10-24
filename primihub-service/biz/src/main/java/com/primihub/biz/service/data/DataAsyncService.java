@@ -204,7 +204,10 @@ public class DataAsyncService implements ApplicationContextAware {
 
     @Async
     public void psiGrpcRun(DataPsiTask psiTask, DataPsi dataPsi,String taskName) {
-        DataResource ownDataResource = dataResourceRepository.queryDataResourceById(dataPsi.getOwnResourceId());
+        DataResource ownDataResource = dataResourceRepository.queryDataResourceByResourceFusionId(dataPsi.getOwnResourceId());
+        if (ownDataResource==null){
+            ownDataResource = dataResourceRepository.queryDataResourceById(Long.parseLong(dataPsi.getOwnResourceId()));
+        }
         String resourceId, resourceColumnNameList;
         int available;
         if (dataPsi.getOtherOrganId().equals(organConfiguration.getSysLocalOrganId())) {

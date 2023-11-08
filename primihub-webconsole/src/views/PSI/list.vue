@@ -187,7 +187,7 @@ export default {
     await this.getAvailableOrganList()
     this.timer = window.setInterval(() => {
       setTimeout(this.getPsiTaskList(), 0)
-    }, 3000)
+    }, 1500)
   },
   destroyed() {
     clearInterval(this.timer)
@@ -237,10 +237,7 @@ export default {
       }).then(() => {
         delPsiTask({ taskId: row.taskId }).then(res => {
           if (res.code === 0) {
-            const posIndex = this.allDataPsiTask.findIndex(item => item.taskId === row.taskId)
-            if (posIndex !== -1) {
-              this.allDataPsiTask.splice(posIndex, 1)
-            }
+            this.getPsiTaskList()
             this.$message({
               message: '删除成功',
               type: 'success',
@@ -253,16 +250,16 @@ export default {
       }).catch(() => {})
     },
     async cancelTask(row) {
-      const res = await cancelTask(row.taskId)
+      this.getPsiTaskList()
+      const res = await cancelTask(row.taskIdName)
       if (res.code === 0) {
         const posIndex = this.allDataPsiTask.findIndex(item => item.taskId === row.taskId)
         this.allDataPsiTask[posIndex].taskState === 4
-        this.$notify({
-          message: '取消成功',
-          type: 'success',
-          duration: 1000
+      } else {
+        this.$message({
+          message: '取消任务失败',
+          type: 'error'
         })
-        this.$emit('cancel', { taskId: row.taskId })
       }
     },
     handleDelete(data) {

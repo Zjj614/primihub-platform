@@ -215,7 +215,7 @@
     <FeatureSelectDialog v-if="featuresDialogVisible" :visible.sync="featuresDialogVisible" :data="featuresOptions" :selected-data="selectedDataAlignFeatures" @submit="handleFeatureDialogSubmit" @close="handleFeatureDialogClose" />
 
     <!-- MPC_MPC_STATISTICS component dialog -->
-    <FeatureMultiSelectDialog v-if="multiFeaturesVisible" :visible.sync="multiFeaturesVisible" :selected-features="selectFeatures" :data="featureItems[featureIndex].features" @submit="handleMultiFeatureDialogSubmit" @close="handleMultiFeatureDialogClose" />
+    <FeatureMultiSelectDialog v-if="multiFeaturesVisible" :visible.sync="multiFeaturesVisible" :data="featureItems[featureIndex].features" @submit="handleMultiFeatureDialogSubmit" @close="handleMultiFeatureDialogClose" />
   </div>
 </template>
 
@@ -294,7 +294,6 @@ export default {
       dataAlignParam: {},
       modelParams: [],
       defaultComponentConfig: [],
-      selectFeatures: [],
       selectType: 'radio',
       emptyMissingData: {
         selectedExceptionFeatures: [],
@@ -544,6 +543,7 @@ export default {
       this.handleChange()
     },
     getFeaturesItem() {
+      // get default mpc statistics options value
       this.defaultExceptionFeatures = this.inputValue.map(item => {
         return {
           organId: item.organId,
@@ -558,44 +558,35 @@ export default {
           checked: []
         }
       })
-      const featureItemsValue = this.nodeData.componentTypes[this.featureConfigIndex] && this.nodeData.componentTypes[this.featureConfigIndex].inputValue ? JSON.parse(this.nodeData.componentTypes[this.featureConfigIndex].inputValue) : [{
+      const mpcStatisticsCom = this.graphData.cells.find(item => item.componentCode === MPC_STATISTICS)
+      const componentInputValue = mpcStatisticsCom && mpcStatisticsCom?.data.componentTypes[0].inputValue !== '' ? JSON.parse(mpcStatisticsCom.data.componentTypes[0].inputValue) : []
+      if (componentInputValue.length > 0) {
+        componentInputValue.forEach(item => {
+          item.features.map((feature, index) => {
+            const current = this.inputValue.find(value => value.organId === feature.organId)
+            const resourceField = current.resourceField && current.resourceField.map(resource => {
+              return {
+                fieldName: resource.fieldName,
+                fieldType: resource.fieldType
+              }
+            })
+            if (!current) {
+              item.features.splice(index, 1)
+            } else {
+              if (feature.resourceId !== current.resourceId) {
+                feature.checked = []
+              }
+              feature.resourceField = resourceField
+              feature.resourceId = current.resourceId
+            }
+          })
+        })
+      }
+
+      const featureItemsValue = componentInputValue.length > 0 ? componentInputValue : [{
         features: this.defaultExceptionFeatures,
         type: ''
       }]
-      this.inputValue.map(value => {
-        featureItemsValue.map(item => {
-          const posIndex = item.features.findIndex(v => v.organId === value.organId)
-          const { organId, organName, resourceId } = value
-          const resourceField = value.resourceField && value.resourceField.map(resource => {
-            return {
-              fieldName: resource.fieldName,
-              fieldType: resource.fieldType
-            }
-          })
-          if (posIndex === -1) {
-            if (this.inputValue.length > item.features.length) {
-              item.features.push({
-                organId,
-                organName,
-                resourceField,
-                resourceId,
-                checked: []
-              })
-            } else {
-              item.features.splice(posIndex, 1)
-            }
-          } else {
-            if (item.features[posIndex].resourceId !== resourceId) {
-              item.features[posIndex].checked = []
-            } else {
-              item.features[posIndex].checked = item.features[posIndex].checked.filter(item => resourceField.find(v => item === v.fieldName))
-            }
-            item.features[posIndex].resourceId = resourceId
-            item.features[posIndex].resourceField = resourceField
-          }
-        })
-      })
-
       this.featureItems = featureItemsValue
       this.setFeaturesValue()
     },
@@ -615,20 +606,13 @@ export default {
         type: ''
       })
       this.processingType.map((item) => {
-        const current = this.featureItems.find(feature => feature.type === item.key)
+        const current = this.featureItems.find(feature => feature.type !== '' && feature.type === item.key)
         item.disabled = !!current
       })
       this.handleChange('exception')
     },
     removeFilling(index) {
       this.featureItems.splice(index, 1)
-      this.featureItems.forEach(item => {
-        if (item.features[0].checked.length > 0) {
-          this.selectFeatures = [...item.features[0].checked]
-        } else {
-          this.selectFeatures = []
-        }
-      })
       this.setFeaturesValue()
       this.handleChange()
     },
@@ -708,6 +692,9 @@ export default {
         this.inputValue.splice(posIndex, 1)
         this.nodeData.componentTypes[0].inputValue = JSON.stringify(this.inputValue)
         this.handleChange()
+        if (this.graphData.cells.find(item => item.componentCode === MPC_STATISTICS)) {
+          this.getFeaturesItem()
+        }
       }
 
       this.selectedProviderOrgans.splice(index, 1)
@@ -901,27 +888,12 @@ export default {
     save() {
       this.$emit('save')
     },
-    setSelectFeaturesStatus() {
-      const selected = []
-      // set checkbox disabled element
-      const featureItems = this.featureItems.filter(feature => feature.type !== this.featureItems[this.featureIndex].type)
-      featureItems.forEach(item => {
-        const checked = item.features[0].checked
-        if (checked.length > 0) {
-          for (let i = 0; i < checked.length; i++) {
-            selected.push(checked[i])
-          }
-        }
-      })
-      this.selectFeatures = selected
-    },
     openMultiFeaturesDialog(index) {
       if (this.inputValue === '') {
         this.$message.error('请先添加选择数据集组件')
         return
       }
       this.featureIndex = index
-      this.setSelectFeaturesStatus()
       this.multiFeaturesVisible = true
     },
     openFeaturesDialog(code, index) {
@@ -950,6 +922,9 @@ export default {
       this.featureItems[this.featureIndex].features = data
       this.multiFeaturesVisible = false
       this.setFeaturesValue()
+      if (this.options.isEditable) {
+        this.handleChange()
+      }
     },
     compareFeature(arr, arr2) {
       if (!arr2) return
@@ -980,20 +955,20 @@ export default {
     },
     handleTypeFocus() {
       this.processingType.map((item) => {
-        const current = this.featureItems.find(feature => feature.type === item.key)
+        const current = this.featureItems.find(feature => feature.type !== '' && feature.type === item.key)
         this.$set(item, 'disabled', !!current)
       })
     },
     handleTypeChange(index, value) {
       this.featureItems[index].type = value
       this.setFeaturesValue()
+      if (this.options.isEditable) {
+        this.handleChange()
+      }
     },
     setFeaturesValue() {
       if (this.nodeData.componentTypes[this.featureConfigIndex]) {
         this.nodeData.componentTypes[this.featureConfigIndex].inputValue = JSON.stringify(this.featureItems)
-        if (this.options.isEditable) {
-          this.handleChange()
-        }
       }
     }
   }

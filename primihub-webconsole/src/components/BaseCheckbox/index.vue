@@ -1,9 +1,13 @@
 <template>
   <div>
     <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
-    <el-checkbox-group v-model="checkedList" @change="handleCheckedChange">
-      <el-checkbox v-for="item in options" :key="item" :label="item" :disabled="filterStatus(item)">{{ item }}</el-checkbox>
-    </el-checkbox-group>
+    <template v-if="options.length > 0">
+      <el-checkbox-group v-model="checkedList" @change="handleCheckedChange">
+        <el-checkbox v-for="item in options" :key="item" :label="item">{{ item }}</el-checkbox>
+      </el-checkbox-group>
+    </template>
+    <p v-else class="no-data">暂无数据</p>
+
   </div>
 </template>
 
@@ -77,3 +81,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .no-data{
+    color: #999;
+    margin: 10px 0;
+    text-align: center;
+  }
+</style>
